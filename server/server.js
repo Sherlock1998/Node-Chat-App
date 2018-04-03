@@ -18,16 +18,14 @@ io.on('connection', (socket) => {
     console.log('Client connected shut down');
   });
 
-  // Emits || Server > Client
-  socket.emit('newMessage', {
-    from: 'Dan@google.com',
-    text: 'hello sir',
-    createAt: new Date().toTimeString(),
-  });
 
-  // Listens || Client > Server
-  socket.on('createMessage', (newEmail) => {
-    console.log('New Email', newEmail);
+  socket.on('createMessage', (message) => {
+    console.log('create Message', message);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime(),
+    });
   });
 });
 

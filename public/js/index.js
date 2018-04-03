@@ -8,10 +8,6 @@ socket.on('disconnect', function () {
 });
 
 // Emits || Client > Server
-socket.emit('createMessage', {
-  to: 'yj@google.com',
-  text: 'hello sir',
-});
 
 
 // Listens || Server > Client
