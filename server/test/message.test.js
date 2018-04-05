@@ -18,7 +18,6 @@ describe('Generate Location Message', () => {
     const lon = 101.7594018;
     const url = `https://www.google.com/maps?q=${lat},${lon}`;
     const message = generateLocationMessage(from, lat, lon);
-    console.log(message);
     expect(message).toMatchObject({ from, url });
   });
 });
