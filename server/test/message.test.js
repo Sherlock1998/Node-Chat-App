@@ -6,7 +6,7 @@ describe('Generate Message', () => {
     const from = 'YJ';
     const text = 'This is some text';
     const message = generateMessage(from, text);
-
+    expect(typeof message.createdAt).toBe('number');
     expect(message).toMatchObject({ from, text });
   });
 });
@@ -19,6 +19,7 @@ describe('Generate Location Message', () => {
     const url = `https://www.google.com/maps?q=${lat},${lon}`;
     const message = generateLocationMessage(from, lat, lon);
     expect(message).toMatchObject({ from, url });
+    expect(typeof message.createdAt).toBe('number');
   });
 });
 
