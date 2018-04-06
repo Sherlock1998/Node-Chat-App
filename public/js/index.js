@@ -1,4 +1,4 @@
-const socket = io();
+var socket = io();
 
 socket.on('connect', function () {
   console.log('Connected to the server');
@@ -8,20 +8,26 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function (message) {
-  const formattedTime = moment(message.createdAt).format('h:mm a');
-  const li = jQuery('<li></li>');
-  li.text(`${message.from} ${formattedTime}: ${message.text} `);
-  jQuery('#messages').append(li);
+  var template = jQuery('#message-template').html();
+  var formattedTime = moment(message.createdAt).format('h:mm a');
+  var html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime,
+  });
+  jQuery('#messages').append(html);
 });
 
 socket.on('newLocationMessage', function (message) {
-  const formattedTime = moment(message.createdAt).format('h:mm a');
-  const li = jQuery('<li></li>');
-  const a = jQuery('<a target="_blank">Here is my location</a>');
-  li.text(`${message.from} ${formattedTime}:`);
-  a.attr('href', message.url);
-  li.append(a);
-  jQuery('#messages').append(li);
+  var template = jQuery('#location-message-template').html();
+  var formattedTime = moment(message.createdAt).format('h:mm a');
+  var html = Mustache.render(template, {
+    from: message.from,
+    createdAt: formattedTime,
+    url: message.url,
+  });
+
+  jQuery('#messages').append(html);
 });
 
 jQuery('#message-form').on('submit', function (e) {
@@ -34,7 +40,7 @@ jQuery('#message-form').on('submit', function (e) {
   });
 });
 
-const locationBtn = jQuery('#share-location');
+var locationBtn = jQuery('#share-location');
 locationBtn.on('click', function () {
   if (!navigator.geolocation) {
     return alert('Geolocation not supported by browser');
