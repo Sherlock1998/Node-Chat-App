@@ -12,15 +12,21 @@ function scrollBottom() {
   var newMessageHeight = newMessage.innerHeight();
   var lastMessageHeight = newMessage.prev().innerHeight();
 
-  console.log('newMessageHeight', newMessageHeight);
-  console.log('lastMessageHeight', lastMessageHeight);
   if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
     messages.scrollTop(scrollHeight);
   }
 }
 
 socket.on('connect', function () {
-  console.log('Connected to the server');
+  var params = jQuery.deparam(window.location.search);
+  socket.emit('join', params, function (err) {
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log('no err');
+    }
+  });
 });
 socket.on('disconnect', function () {
   console.log('Disconnected to the server');
