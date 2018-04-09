@@ -33,10 +33,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join', (params, callback) => {
+    const usersList = users.getUsersList(params.room);
+    // const user = users.getUser(socket.id);
+    console.log(usersList);
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback('Please fill in the name and field room');
     }
+    if (usersList.indexOf(params.name) > -1) {
+      // In the array!
+      return callback('User with the same name already exists in the room');
+    }
     callback();
+    // Not in the array
     socket.join(params.room);
     users.removeUser(socket.id);
     users.addUser(socket.id, params.name, params.room);
@@ -46,12 +54,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on('createMessage', (message, callback) => {
-    io.emit('newMessage', generateMessage(message.from, message.text));
+    const user = users.getUser(socket.id);
+    if (user && isRealString(message.text)) {
+      io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+    }
     callback();
   });
 
   socket.on('createLocationMessage', (coords) => {
-    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+    const user = users.getUser(socket.id);
+    if (user) {
+      io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+    }
   });
 });
 
