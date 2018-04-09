@@ -28,8 +28,19 @@ socket.on('connect', function () {
     }
   });
 });
+
 socket.on('disconnect', function () {
   console.log('Disconnected to the server');
+});
+
+socket.on('updateUsersList', function (usersList) {
+  const ul = jQuery('<ul></ul>');
+
+  usersList.forEach((user) => {
+    ul.append(jQuery('<li></li>').text(user));
+  });
+
+  jQuery('#people').html(ul);
 });
 
 socket.on('newMessage', function (message) {

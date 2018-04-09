@@ -8,5 +8,7 @@ module.exports = {
         "func-names": 0,
         "no-console": 0,
         "no-var": 0,
+        "react/self-closing-comp":0,
+        "react/react-in-jsx-scope":0,
     }
 };
