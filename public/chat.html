@@ -9,21 +9,26 @@
         <title>Node Chat App</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
         <link rel="stylesheet" href="./css/styles.css">
     </head>
     <body class="chat">
         <div class="chat__sidebar">
-            <h3>People</h3>
+            <div id="room"></div>
+            <script id="room-name" type="text/template">
+                <h3 id="room-name__heading">{{room}}</h3>   
+            </script>
             <div id="people"></div>
         </div>
         <div class="chat__main">
             <ol id="messages" class="chat__messages"></ol>
             <div class="chat__footer">
                 <form id="message-form">
-                    <input name="message" type="text" placeholder="Message" autofocus autocomplete="false">
-                    <button>Send</button>
+                    <input name="message" type="text" placeholder="Message" autofocus autocomplete="off" spellcheck="false">
+                    <!-- <button>Send</button> -->
                 </form>
-                <button id="share-location">Share Location</button>
+                <button id="share-location" class="button__location"><i class="fas fa-bullhorn"></i></button>
             </div>           
         </div>    
         <script id="message-template" type="text/template">

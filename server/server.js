@@ -22,8 +22,6 @@ const users = new Users();
 // socket.broadcast.emit = everybody but the user
 
 io.on('connection', (socket) => {
-  console.log('New user connected');
-
   socket.on('disconnect', () => {
     const user = users.removeUser(socket.id);
     if (user) {
@@ -34,8 +32,9 @@ io.on('connection', (socket) => {
 
   socket.on('join', (params, callback) => {
     const usersList = users.getUsersList(params.room);
-    // const user = users.getUser(socket.id);
-    console.log(usersList);
+    const getRoomName = roomName => roomName;
+    const roomName = params.room;
+    socket.emit('roomName', getRoomName(roomName));
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback('Please fill in the name and field room');
     }

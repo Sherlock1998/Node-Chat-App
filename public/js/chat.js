@@ -18,7 +18,7 @@ function scrollBottom() {
 }
 
 socket.on('connect', function () {
-  const params = jQuery.deparam(window.location.search);
+  var params = jQuery.deparam(window.location.search);
   socket.emit('join', params, function (err) {
     if (err) {
       alert(err);
@@ -29,15 +29,31 @@ socket.on('connect', function () {
   });
 });
 
+socket.on('roomName', function (roomName) {
+  var template = jQuery('#room-name').html();
+  console.log(template);
+  var html = Mustache.render(template, {
+    room: roomName,
+  });
+  console.log(html);
+  jQuery('#room').append(html);
+  console.log(roomName);
+});
+
 socket.on('disconnect', function () {
   console.log('Disconnected to the server');
 });
 
 socket.on('updateUsersList', function (usersList) {
-  const ul = jQuery('<ul></ul>');
+  var ul = jQuery('<ul></ul>');
 
   usersList.forEach((user) => {
-    ul.append(jQuery('<li></li>').text(user));
+    var iconColors = ['#E64980', '#6ABBC8', '#FF7F50'];
+    var randomize = iconColors[getRandomInt(iconColors.length)];
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * Math.floor(max));
+    }
+    ul.append(jQuery(`<li><i class="fas fa-user-secret people__icon" style="color:${randomize}"></i>${user}</li>`));
   });
 
   jQuery('#people').html(ul);
@@ -81,16 +97,16 @@ locationBtn.on('click', function () {
   if (!navigator.geolocation) {
     return alert('Geolocation not supported by browser');
   }
-  locationBtn.attr('disabled', 'true').text('Sharing Location...');
+  locationBtn.attr('disabled', 'true');
   navigator.geolocation.getCurrentPosition(function (position) {
     socket.emit('createLocationMessage', {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
     });
-    locationBtn.removeAttr('disabled').text('Share Location');
+    locationBtn.removeAttr('disabled');
   }, function (err) {
     alert('There was an error fetching your location', err);
-    locationBtn.removeAttr('disabled').text('Share Location');
+    locationBtn.removeAttr('disabled');
   }, {
     enableHighAccuracy: true,
   });
