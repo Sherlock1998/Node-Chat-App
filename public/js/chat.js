@@ -23,21 +23,16 @@ socket.on('connect', function () {
     if (err) {
       alert(err);
       window.location.href = '/';
-    } else {
-      console.log('no err');
     }
   });
 });
 
 socket.on('roomName', function (roomName) {
   var template = jQuery('#room-name').html();
-  console.log(template);
   var html = Mustache.render(template, {
     room: roomName,
   });
-  console.log(html);
   jQuery('#room').append(html);
-  console.log(roomName);
 });
 
 socket.on('disconnect', function () {
